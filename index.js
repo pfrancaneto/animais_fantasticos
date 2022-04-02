@@ -1,4 +1,4 @@
-function ativandoTabs() {
+function initTabs() {
   const tabMenu = document.querySelectorAll(".js-tabmenu li");
   const tabContent = document.querySelectorAll(".js-tabcontent section");
 
@@ -20,50 +20,86 @@ function ativandoTabs() {
   }
 }
 
-ativandoTabs();
+initTabs();
 // ==================================================== //
 
-function ativandoAccordion() {
+function initAccordion() {
   const accordionList = document.querySelectorAll(".js-accordion dt");
-  accordionList[0].classList.add('ativo');
-  accordionList[0].nextElementSibling.classList.add('ativo');
 
-  function activeAccordion() {
-    this.classList.toggle("ativo");
-    this.nextElementSibling.classList.add("ativo");
+  if (accordionList.length) {
+    accordionList[0].classList.add("ativo");
+    accordionList[0].nextElementSibling.classList.add("ativo");
+
+    function activeAccordion() {
+      this.classList.toggle("ativo");
+      this.nextElementSibling.classList.toggle("ativo");
+    }
+
+    accordionList.forEach((item) => {
+      item.addEventListener("click", activeAccordion);
+    });
   }
-
-  accordionList.forEach((item) => {
-    item.addEventListener("click", activeAccordion);
-  });
 }
-ativandoAccordion();
+initAccordion();
 
 // =======================================================//
 
-// ativando scroolSuave
-function ativandoScrollSuave() {
+// ativando scrool links
+function initScrollSuave() {
   const linksInternos = document.querySelectorAll('.js-menu a[href^="#"]');
 
-  function handleToScroll(event) {
-    event.preventDefault();
-    const href = event.currentTarget.getAttribute("href");
-    const section = document.querySelector(href);
+  if (linksInternos.length) {
+    function handleToScroll(event) {
+      event.preventDefault();
+      const href = event.currentTarget.getAttribute("href");
+      const section = document.querySelector(href);
 
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      //uma outra forma de fazer o scroll //
+
+      // const topo = section.offsetTop;
+      // window.scrollTo({
+      //   top: topo,
+      //   behavior: 'smooth',
+      // });
+    }
+
+    linksInternos.forEach((link) => {
+      link.addEventListener("click", handleToScroll);
     });
-
-    // const topo = section.offsetTop;
-    // window.scrollTo({
-    //   top: topo,
-    //   behavior: 'smooth',
-    // });
   }
-
-  linksInternos.forEach((link) => {
-    link.addEventListener("click", handleToScroll);
-  });
 }
-ativandoScrollSuave();
+initScrollSuave();
+// ===================================================== //
+
+// ativando scroll lateral //
+
+function initScrollLateral() {
+  const sections = document.querySelectorAll(".js-scroll");
+
+  if (sections.length) {
+    function animaScroll() {
+      sections.forEach((section) => {
+        const windowMetade = window.innerHeight * 0.7;
+
+        const sectionTopo = section.getBoundingClientRect().top - windowMetade;
+        if (sectionTopo < 0) {
+          section.classList.add("ativo");
+        } else {
+          section.classList.remove("ativo");
+        }
+      });
+    }
+
+    animaScroll();
+
+    window.addEventListener("scroll", animaScroll);
+  }
+}
+
+initScrollLateral();
+// =================================================================== //
